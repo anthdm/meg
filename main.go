@@ -24,6 +24,7 @@ const (
 type requester func(request) response
 
 func main() {
+	fmt.Println("this is the new meg!!!!!")
 	// get the config struct
 	c := processArgs()
 
@@ -84,6 +85,10 @@ func main() {
 	owg.Add(1)
 	go func() {
 		for res := range responses {
+			for _, s := range c.saveStatus {
+				fmt.Println(s)
+			}
+
 			if len(c.saveStatus) > 0 && !c.saveStatus.Includes(res.statusCode) {
 				continue
 			}
