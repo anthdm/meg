@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 // headerArgs is the type used to store the header arguments
@@ -22,8 +23,13 @@ func (h headerArgs) String() string {
 type saveStatusArgs []int
 
 func (s *saveStatusArgs) Set(val string) error {
-	i, _ := strconv.Atoi(val)
-	*s = append(*s, i)
+	vals := strings.Split(val, ",")
+
+	for _, value := range vals {
+		i, _ := strconv.Atoi(value)
+		*s = append(*s, i)
+	}
+
 	return nil
 }
 
