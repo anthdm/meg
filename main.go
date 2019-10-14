@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 )
@@ -23,7 +24,6 @@ const (
 type requester func(request) response
 
 func main() {
-
 	// get the config struct
 	c := processArgs()
 
@@ -110,7 +110,6 @@ func main() {
 	// send requests for each path for every host
 	for _, path := range paths {
 		for _, host := range hosts {
-
 			// the host portion may contain a path prefix,
 			// so we should strip that off and add it to
 			// the beginning of the path.
@@ -119,6 +118,13 @@ func main() {
 				fmt.Fprintf(os.Stderr, "failed to parse host: %s\n", err)
 				continue
 			}
+
+			// If the path has no / prefix, we will add one, so we can use
+			// existing wordlists that have no / prefixes.
+			if !strings.HasPrefix(path, "/") {
+				path = "/" + path
+			}
+
 			prefixedPath := u.Path + path
 			u.Path = ""
 
